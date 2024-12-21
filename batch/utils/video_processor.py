@@ -16,18 +16,20 @@ SAVE_DIR = 'batch/output'
 ERROR_OUTPUT_DIR = 'batch/output/ERROR'
 YTB_RESOLUTION_KEY = "ytb_resolution"
 
-def process_video(file, dubbing=False, is_retry=False):
+def process_video(file, dubbing=False, is_retry=False, mergeSubtitles_to_video=True):
     if not is_retry:
         prepare_output_folder(OUTPUT_DIR)
-    
+
     text_steps = [
         ("🎥 Processing input file", partial(process_input_file, file)),
         ("🎙️ Transcribing with Whisper", partial(step2_whisperX.transcribe)),
         ("✂️ Splitting sentences", split_sentences),
         ("📝 Summarizing and translating", summarize_and_translate),
         ("⚡ Processing and aligning subtitles", process_and_align_subtitles),
-        ("🎬 Merging subtitles to video", step7_merge_sub_to_vid.merge_subtitles_to_video),
     ]
+
+    if mergeSubtitles_to_video:
+        text_steps.append(("🎬 Merging subtitles to video", step7_merge_sub_to_vid.merge_subtitles_to_video))
     
     if dubbing:
         dubbing_steps = [
