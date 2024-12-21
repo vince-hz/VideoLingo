@@ -60,7 +60,7 @@ def merge_subtitles_to_video():
 
     if not os.path.exists(SRC_SRT) or not os.path.exists(TRANS_SRT):
         print("Subtitle files not found in the 'output' directory.")
-        exit(1)
+        raise FileNotFoundError("Subtitle files not found in the 'output' directory")
 
     ffmpeg_cmd = [
         'ffmpeg', '-i', video_file,
