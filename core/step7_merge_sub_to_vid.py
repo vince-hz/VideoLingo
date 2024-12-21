@@ -34,7 +34,23 @@ TRANS_SRT = f"{OUTPUT_DIR}/trans.srt"
 def check_gpu_available():
     try:
         result = subprocess.run(['ffmpeg', '-encoders'], capture_output=True, text=True)
-        return 'h264_nvenc' in result.stdout
+        # 如果 ffmpeg 列出了 h264_nvenc 编码器，检查是否有实际的 NVIDIA GPU 支持
+        if 'h264_nvenc' in result.stdout:
+            try:
+                # 使用 nvidia-smi 确认 GPU 是否可用
+                gpu_check = subprocess.run(['nvidia-smi'], capture_output=True, text=True)
+                if gpu_check.returncode == 0:
+                    return True  # 有可用的 NVIDIA GPU
+                else:
+                    print("Error: No NVIDIA GPU found.")
+                    return False
+            except FileNotFoundError:
+                # 如果 nvidia-smi 没有找到，说明没有安装 NVIDIA 驱动
+                print("Error: nvidia-smi command not found. Make sure NVIDIA drivers are installed.")
+                return False
+        else:
+            print("Error: h264_nvenc encoder not found in ffmpeg.")
+            return False
     except:
         return False
 
