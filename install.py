@@ -166,8 +166,8 @@ def main():
         except subprocess.CalledProcessError:
             console.print("❌ Failed to install Noto fonts, please install manually", style="red")
 
-    if platform.system() == 'Linux':
-        install_noto_font()
+    # if platform.system() == 'Linux':
+    #     install_noto_font()
     
     install_requirements()
     check_ffmpeg()
