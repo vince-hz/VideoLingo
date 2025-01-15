@@ -22,8 +22,8 @@ autocorrect-py
 ctranslate2==4.4.0
 edge-tts
 
-demucs[dev] @ git+https://github.com/adefossez/demucs
-whisperx @ git+https://github.com/m-bain/whisperx.git
+# demucs[dev] @ git+https://github.com/adefossez/demucs
+whisperx==3.3.1
 
 syllables
 pypinyin

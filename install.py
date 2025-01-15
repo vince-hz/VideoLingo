@@ -105,7 +105,7 @@ def main():
     else:
         system_name = "🍎 MacOS" if platform.system() == 'Darwin' else "💻 No NVIDIA GPU"
         console.print(Panel(f"{system_name} detected, installing CPU version of PyTorch... However, it would be extremely slow for transcription.", style="cyan"))
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "torch==2.1.2", "torchaudio==2.1.2"])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "torch==2.5.1", "torchaudio==2.5.1"])
 
     def install_requirements():
         try:
@@ -119,6 +119,32 @@ def main():
             ], env={**os.environ, "PIP_NO_CACHE_DIR": "0", "PYTHONIOENCODING": "utf-8"})
         except subprocess.CalledProcessError as e:
             console.print(Panel(f"❌ Failed to install requirements: {str(e)}", style="red"))
+        
+        try:
+            subprocess.check_call([
+                sys.executable, 
+                "-m", 
+                "pip", 
+                "install", 
+                "demucs[dev] @ git+https://github.com/adefossez/demucs",
+                "--no-deps"
+            ], env={**os.environ, "PIP_NO_CACHE_DIR": "0", "PYTHONIOENCODING": "utf-8"})
+        except subprocess.CalledProcessError as e:
+            console.print(Panel(f"❌ Failed to install demucs[dev]: {str(e)}", style="red"))
+
+        try:
+            subprocess.check_call([
+                sys.executable, 
+                "-m", 
+                "pip", 
+                "install", 
+                "-r", 
+                "requirements-demcus.txt"
+            ], env={**os.environ, "PIP_NO_CACHE_DIR": "0", "PYTHONIOENCODING": "utf-8"})
+        except subprocess.CalledProcessError as e:
+            console.print(Panel(f"❌ Failed to install demucs requirements: {str(e)}", style="red"))
+        
+        
 
     def install_noto_font():
         # Detect Linux distribution type
