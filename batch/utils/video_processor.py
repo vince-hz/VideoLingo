@@ -70,8 +70,10 @@ def process_video(file, dubbing=False, is_retry=False, mergeSubtitles_to_video=T
                 ))
     
     console.print(Panel("[bold green]All steps completed successfully! 🎉[/]", border_style="green"))
+    videoPath = step1_ytdlp.find_video_files()
+    videoRawName = os.path.basename(videoPath).split(".")[0]
     cleanup(SAVE_DIR)
-    return True, "", ""
+    return True, "", "", videoRawName
 
 def prepare_output_folder(output_folder):
     if os.path.exists(output_folder):
